@@ -44,10 +44,11 @@ app.post('/verify', async(req, res) => {
 
         const { event, data } = req.body;
         const customerPhone = data.metadata?.whatsapp_number;
+        const reference=data.reference;
         // 3. Process events
         switch (event) {
             case 'charge.success':
-                console.log('Payment successful:', data.reference);
+                console.log('Payment successful:', reference);
                 // 3. Trigger the WhatsApp message
                 if (customerPhone) {
                     const messageText = `✅ *Payment Received!*\n\nReference: ${reference}\nItem: ${itemName}\nAmount: ₦${amount.toLocaleString()}\n\nThank you for your business!`;
