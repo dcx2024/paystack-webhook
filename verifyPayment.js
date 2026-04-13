@@ -44,6 +44,7 @@ app.post('/verify', async(req, res) => {
 
         const { event, data } = req.body;
         const customerPhone = data.metadata?.whatsapp_number;
+        const itemName=data.metadata?.item_name
         const reference=data.reference;
         // 3. Process events
         switch (event) {
