@@ -51,7 +51,7 @@ app.post('/verify', async(req, res) => {
             case 'charge.success':
                 console.log('Payment successful:', reference);
                 // 3. Trigger the WhatsApp message
-                if (customerPhone) {
+                if (sellerPhone) {
                     const messageText = `✅ *Payment Received!*\n\nReference: ${reference}\nItem: ${itemName}\n\nThank you for your business!`;
                     await sendWhatsAppMessage(sellerPhone, messageText);
                 }
