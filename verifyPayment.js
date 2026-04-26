@@ -46,6 +46,7 @@ app.post('/verify', async(req, res) => {
         const sellerPhone = data.metadata?.whatsapp_number;
         const itemName=data.metadata?.item_name
         const reference=data.reference;
+        console.log(sellerPhone)
         // 3. Process events
         switch (event) {
             case 'charge.success':
