@@ -31,7 +31,7 @@ async function sendWhatsAppMessage(to, text) {
     }
 }
 
-app.post('/verify', async(req, res) => {
+app.post('/verifypay', async(req, res) => {
     try {
         // 1. Paystack sends the signature in the header, not the body
         const signature = req.headers['x-paystack-signature'];
@@ -43,7 +43,7 @@ app.post('/verify', async(req, res) => {
         }
 
         const { event, data } = req.body;
-        const customerPhone = data.metadata?.whatsapp_number;
+        const sellerPhone = data.metadata?.whatsapp_number;
         const itemName=data.metadata?.item_name
         const reference=data.reference;
         // 3. Process events
@@ -53,7 +53,7 @@ app.post('/verify', async(req, res) => {
                 // 3. Trigger the WhatsApp message
                 if (customerPhone) {
                     const messageText = `✅ *Payment Received!*\n\nReference: ${reference}\nItem: ${itemName}\n\nThank you for your business!`;
-                    await sendWhatsAppMessage(customerPhone, messageText);
+                    await sendWhatsAppMessage(sellerPhone, messageText);
                 }
                 break;
             case 'charge.failed':
