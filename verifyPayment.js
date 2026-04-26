@@ -46,7 +46,7 @@ app.post('/verify', async(req, res) => {
         const sellerPhone = data.metadata?.sellerphone;
         const itemName=data.metadata?.item_name
         const reference=data.reference;
-        console.log(sellerPhone)
+        console.log("Extracted Seller Phone:", sellerPhone)
         // 3. Process events
         switch (event) {
             case 'charge.success':
