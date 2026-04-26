@@ -31,7 +31,7 @@ async function sendWhatsAppMessage(to, text) {
     }
 }
 
-app.post('/verifypay', async(req, res) => {
+app.post('/verify', async(req, res) => {
     try {
         // 1. Paystack sends the signature in the header, not the body
         const signature = req.headers['x-paystack-signature'];
