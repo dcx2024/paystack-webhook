@@ -43,7 +43,7 @@ app.post('/verify', async(req, res) => {
         }
 
         const { event, data } = req.body;
-        const sellerPhone = data.metadata?.sellerphone;
+        const sellerPhone = data.metadata?.whatsapp_number;
         const itemName=data.metadata?.item_name
         const reference=data.reference;
         console.log("Extracted Seller Phone:", sellerPhone)
