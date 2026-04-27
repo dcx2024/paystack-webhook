@@ -77,7 +77,7 @@ app.post('/verify', async(req, res) => {
             const amount = data.amount / 100; // Convert kobo to Naira
 
             if (sellerPhone) {
-                const messageText = `✅ *Payment Received!*\n\nRef: ${reference}\nItem: ${itemName}\nAmount: ₦${amount.toLocaleString()} This i syour otp ${otp}`;
+                const messageText = `✅ *Payment Received!*\n\nRef: ${reference}\nItem: ${itemName}\nAmount: ₦${amount.toLocaleString()}`;
                 await sendWhatsAppMessage(sellerPhone, messageText);
             }
 
