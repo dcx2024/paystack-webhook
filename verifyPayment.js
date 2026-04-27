@@ -33,6 +33,7 @@ async function sendWhatsAppMessage(to, text) {
 
 async function sendOTPMessage(to, otp) {
     try {
+        const device_ip=process.env.DEVICE_IP
         const url = `http://${device_ip}:8080/message`;
 
         const payload = {
