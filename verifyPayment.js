@@ -33,7 +33,7 @@ async function sendWhatsAppMessage(to, text) {
 async function sendOTPMessage(to, otp) {
     try {
         const device_ip=process.env.DEVICE_IP
-        const url = `http://192.168.177.57:8080/message`;
+        const url = `https://tantalizing-roundly-babara.ngrok-free.dev/message`;
 
         const payload = {
             textMessage: {
