@@ -3,7 +3,6 @@ const express = require('express');
 const crypto = require('crypto');
 const axios=require('axios')
 const app = express();
-const secret = 'sk_test_973b5bd99f0872a513ea7ae6eae157f283102153'
 
 
 const port = 5000;
