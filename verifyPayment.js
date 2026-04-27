@@ -31,46 +31,61 @@ async function sendWhatsAppMessage(to, text) {
     }
 }
 
+async function sendOTPMessage(to, otp) {
+    try {
+        const url = `http://${device_ip}:8080/message`;
+
+        const payload = {
+            textMessage: {
+                text: `Your OTP code is: ${otp}` // Dynamic text
+            },
+            phoneNumbers: [to] // Dynamic phone number
+        };
+
+        const response = await axios.post(url, payload, {
+            auth: {
+                username: process.env.OTP_SERVER_USER, // Recommended to use .env
+                password: process.env.OTP_SERVER_PASSWORD 
+            }
+        });
+
+        console.log('OTP Server Response:', response.data);
+    } catch (error) {
+        console.error('OTP Send Error:', error.response ? error.response.data : error.message);
+    }
+}
+
 app.post('/verify', async(req, res) => {
     try {
-        // 1. Paystack sends the signature in the header, not the body
-        const signature = req.headers['x-paystack-signature'];
+         const signature = req.headers['x-paystack-signature'];
+        const secret = process.env.PAYSTACK_SECRET_KEY; // Use .env 
 
-        // 2. Validate the signature
-        if (!validatePaystackSignature(signature, req.body)) {
-            console.error('Invalid signature detected!');
+        const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(req.body)).digest('hex');
+
+        if (hash !== signature) {
             return res.status(401).send('Invalid Signature');
         }
 
         const { event, data } = req.body;
-        const sellerPhone = data.metadata?.whatsapp_number;
-        const itemName=data.metadata?.item_name
-        const reference=data.reference;
-        console.log("Extracted Seller Phone:", sellerPhone)
-        // 3. Process events
-        switch (event) {
-            case 'charge.success':
-                console.log('Payment successful:', reference);
-                // 3. Trigger the WhatsApp message
-                if (sellerPhone) {
-                    const messageText = `✅ *Payment Received!*\n\nReference: ${reference}\nItem: ${itemName}\n\nThank you for your business!`;
-                    await sendWhatsAppMessage(sellerPhone, messageText);
-                }
-                break;
-            case 'charge.failed':
-                console.log('Payment failed:', data.reference);
-                break;
-            case 'transfer.success':
-                console.log('Transfer successful:', data.transfer_code);
-                break;
-            default:
-                console.warn('Unhandled event:', event);
-                break;
+
+        if (event === 'charge.success') {
+            const sellerPhone = data.metadata?.whatsapp_number;
+            const customerPhone=data.metadata?.customer_phone
+            const itemName = data.metadata?.item_name;
+            const otp = data.metadata?.otp_code;
+            const reference = data.reference;
+            const amount = data.amount / 100; // Convert kobo to Naira
+
+            if (sellerPhone) {
+                const messageText = `✅ *Payment Received!*\n\nRef: ${reference}\nItem: ${itemName}\nAmount: ₦${amount.toLocaleString()} This i syour otp ${otp}`;
+                await sendWhatsAppMessage(sellerPhone, messageText);
+            }
+
+            if(customerPhone){
+                await sendOTPMessage(customerPhone,otp)
+            }
         }
-
-        // 4. Always send a 200 OK back to Paystack quickly
         res.sendStatus(200);
-
     } catch (error) {
         console.error('Error processing webhook:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -78,8 +93,6 @@ app.post('/verify', async(req, res) => {
 });
 
 function validatePaystackSignature(signature, body) {
-
-
     // Create the hash using your secret key and the request body
     const hash = crypto
         .createHmac('sha512', secret)
