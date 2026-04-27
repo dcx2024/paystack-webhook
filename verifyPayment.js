@@ -21,7 +21,7 @@ async function sendWhatsAppMessage(to, text) {
                 text: { body: text },
             },
             headers: {
-                Authorization: `Bearer EAASz9lBuHioBRc5KK36dH9T630ugA93GepvWN4qsXWo6px97o4ZAWrRmj1MWreZCzTZACdLJMXkWYZA5AsTA3PFPEnhr5gjjZCa918rEgeHD2WQ3JbNqiz5fyVk8G0NjQhH2amaf1RjoquTLqSGK264qPivuuZAnAMOuTdQZAqipdxGMwKZAQZBbGtFtDq4CQoZAayZAitFgAXbpCVB9nNZBkm1DrT9IV3LKMnAvO1lHOZBBt4Bdt53wi9FDLfR5OZCnRWcQ1V8L79ICyDxZBxcNsqpaGBU`,
+                Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
                 "Content-Type": "application/json",
             },
         });
