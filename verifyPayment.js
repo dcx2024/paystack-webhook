@@ -70,6 +70,7 @@ app.post('/verify', async(req, res) => {
         if (event === 'charge.success') {
             const sellerPhone = data.metadata?.whatsapp_number;
             const customerPhone=data.metadata?.customer_phone
+            console.log(customerPhone)
             const itemName = data.metadata?.item_name;
             const otp = data.metadata?.otp_code;
             const reference = data.reference;
