@@ -81,9 +81,25 @@ const formattedPhone=customerPhone.startsWith('0')? `234${customerPhone.slice(1)
                 await sendWhatsAppMessage(sellerPhone, messageText);
             }
 
-            if(customerPhone){
-                await sendOTPMessage(formattedPhone,otp)
-            }
+            if (customerPhone) {
+    // 1. Force the input to a string and strip any accidental characters
+    let cleanPhone = String(customerPhone).trim().replace(/\D/g, '');
+
+    // 2. If Paystack stripped the leading '0' (e.g., "8022965020"), add it back
+    if (cleanPhone.length === 10 && cleanPhone.startsWith('8')) {
+        cleanPhone = '0' + cleanPhone;
+    }
+
+    // 3. Convert local Nigerian format (08022965020) to International format (2348022965020)
+    if (cleanPhone.startsWith('0') && cleanPhone.length === 11) {
+        cleanPhone = `234${cleanPhone.slice(1)}`;
+    }
+
+    console.log(`[DEBUG] Received from Paystack: ${customerPhone} -> Sending to SMS-Gate: ${cleanPhone}`);
+
+    // Call your function with the safely converted string
+    await sendOTPMessage(cleanPhone, otp);
+}
         }
         res.sendStatus(200);
     } catch (error) {
