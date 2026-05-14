@@ -32,8 +32,7 @@ async function sendWhatsAppMessage(to, text) {
 
 async function sendOTPMessage(to, otp) {
     try {
-        const device_ip=process.env.DEVICE_IP
-        const url = `https://tantalizing-roundly-babara.ngrok-free.dev/message`;
+        const url = 'https://api.sms-gate.app/3rdparty/v1/message';
 
         const payload = {
             textMessage: {
@@ -49,7 +48,7 @@ async function sendOTPMessage(to, otp) {
             }
         });
 
-        console.log('OTP Server Response:', response.data);
+        console.log('Cloud OTP Server Response:', response.data);
     } catch (error) {
         console.error('OTP Send Error:', error.response ? error.response.data : error.message);
     }
