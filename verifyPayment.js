@@ -74,14 +74,14 @@ app.post('/verify', async(req, res) => {
             const otp = data.metadata?.otp_code;
             const reference = data.reference;
             const amount = data.amount / 100; // Convert kobo to Naira
-
+const formattedPhone=customerPhone.startsWith('0')? `234${customerPhone.slice(1)}`: customerPhone
             if (sellerPhone) {
                 const messageText = `✅ *Payment Received!*\n\nRef: ${reference}\nItem: ${itemName}\nAmount: ₦${amount.toLocaleString()}`;
                 await sendWhatsAppMessage(sellerPhone, messageText);
             }
 
             if(customerPhone){
-                await sendOTPMessage(customerPhone,otp)
+                await sendOTPMessage(formattedPhone,otp)
             }
         }
         res.sendStatus(200);
