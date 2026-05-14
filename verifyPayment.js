@@ -92,7 +92,7 @@ const formattedPhone=customerPhone.startsWith('0')? `234${customerPhone.slice(1)
 
     // 3. Convert local Nigerian format (08022965020) to International format (2348022965020)
     if (cleanPhone.startsWith('0') && cleanPhone.length === 11) {
-        cleanPhone = `234${cleanPhone.slice(1)}`;
+        cleanPhone = `+234${cleanPhone.slice(1)}`;
     }
 
     console.log(`[DEBUG] Received from Paystack: ${customerPhone} -> Sending to SMS-Gate: ${cleanPhone}`);
